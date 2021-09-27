@@ -1,9 +1,12 @@
 import express from 'express';
+import helmet from 'helmet'
 import connectDB from './src/config'
 import Routes from './src/routers'
 import {methodError, serverError} from './src/Error/error'  
 
 const app = express();
+
+app.use(helmet());
 
 connectDB()
 
