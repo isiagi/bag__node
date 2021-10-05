@@ -74,32 +74,32 @@ const userController = {
       .update(req.params.resetToken)
       .digest('hex');
 
-      console.log(resetPasswordToken);
+    console.log(resetPasswordToken);
 
-      try {    
-          const user = await User.findOne({
-            resetPasswordToken,
-            resetPasswordExpire: { $gt: Date.now() },
-          });
-      
-          if(!user){
-             return res.status(400).json({ error: "user does not exist" }); 
-          }
-      
-          user.password = req.body.password;
-          user.resetPasswordToken = undefined;
-          user.resetPasswordExpire = undefined;
-      
-          await user.save()
+    try {
+      const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
+      });
 
-          res.status(201).json({
-            success: true,
-            data: "Password Updated Success",
-            token: user.getSignedJwtToken(),
-          });
-      } catch (error) {
-        return res.status(500).json({ error: error.message });
+      if (!user) {
+        return res.status(400).json({ error: 'user does not exist' });
       }
+
+      user.password = req.body.password;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+
+      await user.save();
+
+      res.status(201).json({
+        success: true,
+        data: 'Password Updated Success',
+        token: user.getSignedJwtToken(),
+      });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
   },
 };
 
