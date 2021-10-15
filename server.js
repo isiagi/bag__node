@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet'
 import connectDB from './src/config'
 import Routes from './src/routers'
+import cors from 'cors'
 import {methodError, serverError} from './src/Error/error'  
 
 const app = express();
@@ -10,10 +11,12 @@ app.use(helmet());
 
 connectDB()
 
+app.use(cors())
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use('/uploads/', express.static('uploads'))
-app.use('/api/v1/user/', Routes);
+app.use('/api/v1/user', Routes);
 app.use(methodError)
 app.use(serverError);
 
